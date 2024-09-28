@@ -532,7 +532,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrive.getPitch();
   }
 
-  public double getYaw() {
-    return (swerveDrive.getYaw().getDegrees());
+  public Rotation2d getYaw() {
+    return (swerveDrive.getYaw());
   } 
 }

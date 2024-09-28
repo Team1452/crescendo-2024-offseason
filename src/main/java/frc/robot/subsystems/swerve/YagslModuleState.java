@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,12 +28,14 @@ public class YagslModuleState extends ModuleInputsAutoLogged {
 
   public void fromModule(SwerveModule module) {
     // Get SparkMaxes directly for current output reading
-    var driveMotor = (CANSparkMax) module.configuration.driveMotor.getMotor();
+    var driveMotor = (TalonFX) module.configuration.driveMotor.getMotor();
     var angleMotor = (CANSparkMax) module.configuration.angleMotor.getMotor();
 
     driveVelocityMetersPerSecond = module.getDriveMotor().getVelocity();
     driveVoltage = module.getDriveMotor().getVoltage();
-    driveCurrentAmps = driveMotor.getOutputCurrent();
+    
+    
+    driveCurrentAmps = driveMotor.getStatorCurrent().getValue();
 
     turnPositionRadians = Rotation2d.fromDegrees(module.getAbsolutePosition());
     turnVelocityDegreesPerSecond = module.getAngleMotor().getVelocity();

@@ -36,7 +36,7 @@ public class RealignToForward extends Command {
     @Override
     public void execute() {
         // Get the current robot heading from the gyro
-        double currentHeading = drivebase.getYaw();
+        double currentHeading = drivebase.getYaw().getDegrees();
         
         // Calculate the rotation power needed to reach the target
         double rotationSpeed = turnController.calculate(currentHeading);
