@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
@@ -30,6 +31,8 @@ public class YagslModuleState extends ModuleInputsAutoLogged {
     // Get SparkMaxes directly for current output reading
     var driveMotor = (TalonFX) module.configuration.driveMotor.getMotor();
     var angleMotor = (CANSparkMax) module.configuration.angleMotor.getMotor();
+
+    driveMotor.getConfigurator().apply(new TalonFXConfiguration()); //set default config for talons
 
     driveVelocityMetersPerSecond = module.getDriveMotor().getVelocity();
     driveVoltage = module.getDriveMotor().getVoltage();
