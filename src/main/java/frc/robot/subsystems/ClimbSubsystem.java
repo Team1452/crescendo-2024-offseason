@@ -92,6 +92,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public void setClimbOutputs(
     double leftClimbVelocity,
     double rightClimbVelocity
+    //This code might be redundant. Either the encoders get checked in RobotContainer or Here, not sure what the difference is or why two checks are in place.
   ) {
     if ( (leftClimbVelocity < 0 && leftClimber.getEncoder().getPosition() < 0) ||
       (

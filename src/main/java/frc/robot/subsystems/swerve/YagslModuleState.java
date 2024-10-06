@@ -29,16 +29,14 @@ public class YagslModuleState extends ModuleInputsAutoLogged {
 
   public void fromModule(SwerveModule module) {
     // Get SparkMaxes directly for current output reading
-    var driveMotor = (TalonFX) module.configuration.driveMotor.getMotor();
+    var driveMotor = (CANSparkMax) module.configuration.driveMotor.getMotor();
     var angleMotor = (CANSparkMax) module.configuration.angleMotor.getMotor();
-
-    driveMotor.getConfigurator().apply(new TalonFXConfiguration()); //set default config for talons
 
     driveVelocityMetersPerSecond = module.getDriveMotor().getVelocity();
     driveVoltage = module.getDriveMotor().getVoltage();
     
     
-    driveCurrentAmps = driveMotor.getStatorCurrent().getValue();
+    driveCurrentAmps = driveMotor.getAppliedOutput();
 
     turnPositionRadians = Rotation2d.fromDegrees(module.getAbsolutePosition());
     turnVelocityDegreesPerSecond = module.getAngleMotor().getVelocity();
