@@ -255,25 +255,10 @@ public class RobotContainer {
               ", Right: " +
               climbSubsystem.getRightPosition()
             );
-
-            if (
-              leftClimbVelocity < 0 &&
-              (
-                climbSubsystem.leftLimitHit() 
-               // || climbSubsystem.getLeftPosition() < 1e-3 | removed soft limit
-              )
-            ) leftClimbVelocity = 0;
-            if (
-              rightClimbVelocity < 0 && 
-              (
-                climbSubsystem.rightLimitHit() 
-                //|| climbSubsystem.getRightPosition() < 1e-3 | removed soft limit
-              )
-            ) rightClimbVelocity = 0;
-
+            
             climbSubsystem.setClimbOutputs(
               leftClimbVelocity,
-              rightClimbVelocity  
+              rightClimbVelocity 
             );
 
             double velocity =

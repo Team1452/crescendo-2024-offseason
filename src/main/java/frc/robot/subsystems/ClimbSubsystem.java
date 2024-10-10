@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CANIds;
 import frc.robot.Constants.ClimbConstants;
 
@@ -13,14 +14,15 @@ public class ClimbSubsystem extends SubsystemBase {
 
   private CANSparkMax leftClimber, rightClimber;
   private DigitalInput leftLimitSwitch = new DigitalInput(
-    5
-  ), rightLimitSwitch = new DigitalInput(6);
+    6
+  ), rightLimitSwitch = new DigitalInput(7);
 
   public ClimbSubsystem() {
     leftClimber = new CANSparkMax(CANIds.kClimberLeft, MotorType.kBrushless);
     rightClimber = new CANSparkMax(CANIds.kClimberRight, MotorType.kBrushless);
-
+    
     leftClimber.restoreFactoryDefaults();
+
     rightClimber.restoreFactoryDefaults();
 
     leftClimber.setIdleMode(IdleMode.kBrake);
@@ -43,11 +45,13 @@ public class ClimbSubsystem extends SubsystemBase {
     // setPID(kClimbP, kClimbI, kClimbD);
 
     rightClimber.setInverted(false);
-    leftClimber.setInverted(false);
+    leftClimber.setInverted(true);
   }
 
-  public void reset() {
+  public void resetLeft() {
     leftClimber.getEncoder().setPosition(0);
+  }
+  public void resetRight() {
     rightClimber.getEncoder().setPosition(0);
   }
 
@@ -92,25 +96,22 @@ public class ClimbSubsystem extends SubsystemBase {
   public void setClimbOutputs(
     double leftClimbVelocity,
     double rightClimbVelocity
-    //This code might be redundant. Either the encoders get checked in RobotContainer or Here, not sure what the difference is or why two checks are in place.
+ // Check limits, then apply drive motor.
   ) {
-    if ( (leftClimbVelocity < 0 && leftClimber.getEncoder().getPosition() < 0) ||
-      (
-        leftClimbVelocity > 0 &&
-        leftClimber.getEncoder().getPosition() >=
-        ClimbConstants.kLeftUpperLimitRotations
-      )
-    ) leftClimber.set(0); else leftClimber.set(leftClimbVelocity);
-
-    if (
-      rightClimbVelocity < 0 &&
-      rightClimber.getEncoder().getPosition() < 0 ||
-      (
-        rightClimbVelocity > 0 &&
-        rightClimber.getEncoder().getPosition() >=
-        ClimbConstants.kRightUpperLimitRotations
-      )
-    ) rightClimber.set(0); else rightClimber.set(rightClimbVelocity);
+    if(leftClimber.getEncoder().getPosition() >=ClimbConstants.kLeftUpperLimitRotations&& leftClimbVelocity >0){
+      leftClimber.set(0);
+    } else leftClimber.set(leftClimbVelocity);
+    if(rightClimber.getEncoder().getPosition() >=ClimbConstants.kRightUpperLimitRotations && rightClimbVelocity >0){
+      rightClimber.set(0);
+    } else rightClimber.set(rightClimbVelocity);
+    if(!leftLimitSwitch.get()&& leftClimbVelocity <0){
+      leftClimber.set(0);
+      leftClimber.getEncoder().setPosition(0);
+    }
+    if(!rightLimitSwitch.get()&& rightClimbVelocity <0){
+      rightClimber.set(0);
+      rightClimber.getEncoder().setPosition(0);
+    }
   }
 
   double lastLeftClimbCurrent, lastRightClimbCurrent;

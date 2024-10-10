@@ -39,8 +39,8 @@ public final class Constants {
 
   public static class ClimbConstants {
 
-    public static final double kRightUpperLimitRotations = 284.5;
-    public static final double kLeftUpperLimitRotations = 344.9;
+    public static final double kRightUpperLimitRotations = 306;
+    public static final double kLeftUpperLimitRotations = 386;
   }
 
   public static class LEDConstants {
